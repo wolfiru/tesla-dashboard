@@ -1930,17 +1930,31 @@ function loadStatistik(still) {
     });
 
     // Monate
+    // Alle Monate zwischen erstem und letztem zeigen (Monate ohne Daten als Lücke, nicht übersprungen)
+    const mListe = [];
+    if (d.monate.length) {
+      let [jj, mm] = d.monate[0].monat.split('-').map(Number);
+      const ende = d.monate[d.monate.length - 1].monat;
+      for (let i = 0; i < 240; i++) {
+        const k = `${jj}-${String(mm).padStart(2, '0')}`; mListe.push(k);
+        if (k >= ende) break;
+        if (++mm > 12) { mm = 1; jj++; }
+      }
+    }
+    const mWert = (k, f) => { const x = d.monate.find(m => m.monat === k); return x ? x[f] : null; };
+    const mText = k => { const [jj, mm] = k.split('-'); return MONATE_DE[+mm - 1].slice(0, 3) + ' ' + jj.slice(2); };
     makeChart('chart-st-monat', {
       data: {
-        labels: d.monate.map(m => m.monat),
+        labels: mListe.map(mText),
         datasets: [
-          {type: 'bar',  label: 'km', data: d.monate.map(m => m.km), backgroundColor: 'rgba(61,90,153,.7)', yAxisID: 'y', borderRadius: 4},
-          {type: 'line', label: 'Wh/km', data: d.monate.map(m => m.wh_km), borderColor: '#e31937', yAxisID: 'y1', tension: .3},
-          {type: 'line', label: 'geladen kWh', data: d.monate.map(m => m.geladen_kwh), borderColor: '#00c851', borderDash: [4,4], yAxisID: 'y', tension: .3},
+          {type: 'bar',  label: 'km', data: mListe.map(k => mWert(k, 'km')), backgroundColor: 'rgba(61,90,153,.7)', yAxisID: 'y', borderRadius: 4},
+          // Wh/km-Achse ab 0: sonst zoomt sie auf wenige Wh/km und kleine Unterschiede wirken riesig
+          {type: 'line', label: 'Wh/km', data: mListe.map(k => mWert(k, 'wh_km')), borderColor: '#e31937', backgroundColor: '#e31937', yAxisID: 'y1', tension: 0, pointRadius: 4, spanGaps: false},
+          {type: 'line', label: 'geladen kWh', data: mListe.map(k => mWert(k, 'geladen_kwh')), borderColor: '#00c851', borderDash: [4,4], yAxisID: 'y', tension: 0, spanGaps: false},
         ]
       },
-      options: {maintainAspectRatio: false, scales: {y: {title: {display: true, text: 'km / kWh'}},
-                y1: {position: 'right', grid: {drawOnChartArea: false}, title: {display: true, text: 'Wh/km'}}}}
+      options: {maintainAspectRatio: false, scales: {y: {beginAtZero: true, title: {display: true, text: 'km / kWh'}},
+                y1: {position: 'right', beginAtZero: true, suggestedMax: 300, grid: {drawOnChartArea: false}, title: {display: true, text: 'Wh/km'}}}}
     });
 
     // Höhenmeter
