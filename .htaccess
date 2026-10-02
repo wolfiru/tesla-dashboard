@@ -1,0 +1,26 @@
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Einstellungen und Hilfsordner nie direkt ausliefern
+    RewriteRule ^config(\.local)?\.php(\.alt)?$ - [F,L]
+    RewriteRule ^(sql|docs|tools|lib)/ - [F,L]
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Content-Security-Policy "default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data:; connect-src 'self'"
+</IfModule>
+
+# PHP settings
+<IfModule mod_php.c>
+    php_value session.cookie_httponly 1
+    php_value session.cookie_samesite Strict
+    php_value display_errors 0
+    php_value log_errors 1
+</IfModule>

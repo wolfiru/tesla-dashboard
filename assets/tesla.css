@@ -1,0 +1,766 @@
+/* ============================================================
+   Tesla Dashboard – Global Stylesheet
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0a0a14;
+  --surface:  #111122;
+  --card:     #1a1a2e;
+  --card2:    #1e1e38;
+  --border:   #2a2a4e;
+  --accent:   #e31937;
+  --accent2:  #ff4d60;
+  --blue:     #3d5a99;
+  --blue2:    #5b7fc9;
+  --green:    #00c851;
+  --yellow:   #ffb300;
+  --warn:     #ff8800;
+  --text:     #f0f0ff;
+  --muted:    #8888aa;
+  --muted2:   #5555777;
+  --shadow:   rgba(0,0,0,.5);
+  --radius:   12px;
+  --radius-sm:8px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ── Header ── */
+#app-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(10,10,20,.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .6rem 1.5rem;
+  gap: 1rem;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+}
+
+.header-brand .t-logo {
+  width: 32px;
+  height: 32px;
+  fill: var(--accent);
+}
+
+.header-brand h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+.state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .3rem .7rem;
+  border-radius: 20px;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.state-badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: .3; }
+}
+
+.state-driving  { background: rgba(227,25,55,.15); color: var(--accent);  border: 1px solid rgba(227,25,55,.3); }
+.state-charging { background: rgba(0,200,81,.15);  color: var(--green);   border: 1px solid rgba(0,200,81,.3); }
+.state-online   { background: rgba(61,90,153,.15); color: var(--blue2);   border: 1px solid rgba(61,90,153,.3); }
+.state-asleep   { background: rgba(80,80,100,.15); color: var(--muted);   border: 1px solid rgba(80,80,100,.3); }
+.state-offline  { background: rgba(80,80,100,.1);  color: var(--muted);   border: 1px solid rgba(80,80,100,.2); }
+.state-dot-driving  { background: var(--accent); }
+.state-dot-charging { background: var(--green); }
+.state-dot-online   { background: var(--blue2); animation: none; }
+.state-dot-asleep   { background: var(--muted); animation: none; }
+.state-dot-offline  { background: #555; animation: none; }
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  padding: .35rem .8rem;
+  font-size: .8rem;
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-logout:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Tab Navigation ── */
+#tab-nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#tab-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  padding: .9rem 1.4rem;
+  white-space: nowrap;
+  transition: color .2s, border-color .2s;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tab-btn .tab-icon { margin-right: .4rem; }
+
+/* ── Tab Content ── */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── Main Layout ── */
+#main-content { padding: 1.2rem 1.5rem; max-width: 1600px; margin: 0 auto; }
+
+/* ── Grid helpers ── */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1rem; }
+
+@media (max-width: 900px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  #main-content { padding: .8rem 1rem; }
+  .tab-btn { padding: .8rem 1rem; font-size: .8rem; }
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+/* ── Stat Cards ── */
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+}
+
+.stat-label {
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: .3rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.stat-unit {
+  font-size: .85rem;
+  font-weight: 400;
+  color: var(--muted);
+  margin-left: .2rem;
+}
+
+.stat-sub {
+  font-size: .75rem;
+  color: var(--muted);
+  margin-top: .3rem;
+}
+
+.val-accent  { color: var(--accent); }
+.val-green   { color: var(--green); }
+.val-blue    { color: var(--blue2); }
+.val-yellow  { color: var(--yellow); }
+.val-warn    { color: var(--warn); }
+
+/* ── Battery Bar ── */
+.battery-wrap {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  margin-top: .5rem;
+}
+
+.battery-track {
+  flex: 1;
+  height: 14px;
+  background: rgba(255,255,255,.08);
+  border-radius: 7px;
+  overflow: hidden;
+  position: relative;
+}
+
+.battery-fill {
+  height: 100%;
+  border-radius: 7px;
+  transition: width .6s ease;
+  background: var(--green);
+}
+.battery-fill.mid  { background: var(--yellow); }
+.battery-fill.low  { background: var(--accent); }
+
+.battery-pct {
+  font-size: .85rem;
+  font-weight: 700;
+  min-width: 38px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── TPMS Diagram ── */
+.tpms-car {
+  position: relative;
+  width: 200px;
+  height: 280px;
+  margin: 0 auto;
+}
+
+.tpms-car svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tpms-wheel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .15rem;
+}
+
+.tpms-wheel .psi-val {
+  font-size: .9rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.tpms-wheel .psi-label {
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+
+.psi-ok   { color: var(--green); }
+.psi-low  { color: var(--warn); }
+.psi-crit { color: var(--accent); }
+
+/* auf Höhe der Achsen des neuen Model-X-Bildes (viewBox 120×200 → 168×280 px) */
+.tpms-wheel.fl { top: 42px;  left: -4px; }
+.tpms-wheel.fr { top: 42px;  right: -4px; }
+.tpms-wheel.rl { top: 188px; left: -4px; }
+.tpms-wheel.rr { top: 188px; right: -4px; }
+
+/* ── Map ── */
+#map-container {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+#vehicle-map {
+  width: 100%;
+  height: max(480px, calc(100vh - 250px));   /* füllt den Bildschirm unter Kopf, Reitern und Leiste */
+  background: var(--card);
+}
+
+.map-overlay {
+  position: absolute;
+  top: .8rem;
+  right: .8rem;
+  background: rgba(10,10,20,.9);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: .6rem .9rem;
+  font-size: .8rem;
+  backdrop-filter: blur(8px);
+  z-index: 400;
+  min-width: 160px;
+}
+
+.map-overlay p { color: var(--muted); margin-top: .2rem; }
+.map-overlay b { color: var(--text); }
+
+/* ── Tables ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .82rem;
+}
+
+.data-table th {
+  text-align: left;
+  padding: .55rem .8rem;
+  font-size: .68rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: .55rem .8rem;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(255,255,255,.03); }
+
+/* ── Range Filter ── */
+.range-filter {
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+}
+
+.range-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  padding: .3rem .8rem;
+  transition: all .2s;
+}
+.range-btn:hover { border-color: var(--blue2); color: var(--blue2); }
+.range-btn.active { background: var(--blue); border-color: var(--blue2); color: #fff; }
+
+/* ── Charts (Chart.js canvas) ── */
+.chart-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* ── Loading / Error states ── */
+.loading-msg {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-msg {
+  background: rgba(227,25,55,.1);
+  border: 1px solid rgba(227,25,55,.3);
+  border-radius: var(--radius-sm);
+  color: #ff6b7a;
+  padding: .8rem 1rem;
+  font-size: .85rem;
+  text-align: center;
+}
+
+/* ── Wallbox Panel ── */
+.wallbox-status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: .8rem;
+}
+
+.wallbox-item {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: .8rem 1rem;
+}
+
+.wallbox-item .w-label { font-size: .68rem; color: var(--muted); letter-spacing: .07em; text-transform: uppercase; margin-bottom: .25rem; }
+.wallbox-item .w-value { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ── Responsive overrides ── */
+@media (max-width: 768px) {
+  #app-header { padding: .5rem 1rem; }
+  .header-brand h1 { font-size: .95rem; }
+  .header-meta .header-time { display: none; }
+  #vehicle-map { height: max(380px, calc(100vh - 300px)); }
+}
+/* Handy: Kopfzeile passt nicht in 390 px („Abmelden“ war abgeschnitten) */
+@media (max-width: 480px) {
+  .header-brand h1, #header-range { display: none; }
+  .header-meta { gap: .5rem; }
+  #app-header { gap: .5rem; }
+}
+
+/* ── Statistik-Tab ── */
+.stat-hint { font-size: .75rem; color: var(--muted); }
+.matrix-table { width: 100%; border-collapse: separate; border-spacing: 3px; font-variant-numeric: tabular-nums; }
+.matrix-table th { font-size: .72rem; color: var(--muted); font-weight: 600; padding: .35rem .5rem; text-align: center; white-space: nowrap; }
+.matrix-table tbody th { text-align: right; }
+.matrix-table td { text-align: center; border-radius: 6px; padding: .4rem .3rem; min-width: 64px; border: 1px solid var(--border); }
+.matrix-table td b { display: block; font-size: .95rem; color: #fff; }
+.matrix-table td small { display: block; font-size: .65rem; color: rgba(255,255,255,.65); }
+.matrix-table td.mx-thin b, .matrix-table td.mx-thin small { color: var(--muted); opacity: .6; }
+.matrix-table td.mx-empty { color: var(--border); border-style: dashed; }
+.calc-grid { display: grid; grid-template-columns: repeat(3, 1fr) 1.1fr; gap: 1rem 1.5rem; align-items: end; }
+.calc-field { display: flex; flex-direction: column; gap: .45rem; font-size: .8rem; color: var(--muted); }
+.calc-field b { color: var(--text); }
+.calc-field input[type=range] { width: 100%; accent-color: var(--accent); }
+.calc-field select { background: var(--card2); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: .45rem .5rem; font: inherit; }
+.calc-result { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: .7rem 1rem; }
+.rekord-card .stat-sub { line-height: 1.4; }
+@media (max-width: 900px) { .calc-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .calc-grid { grid-template-columns: 1fr; } }
+
+/* ── Fahrzeugzustand ── */
+.zs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .6rem; }
+.zs-item { background: var(--card2); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: var(--radius-sm); padding: .55rem .75rem; }
+.zs-item.zs-ok   { border-left-color: var(--green); background: rgba(0,200,81,.10); border-color: rgba(0,200,81,.28); }
+.zs-item.zs-warn { border-left-color: var(--accent); background: rgba(227,25,55,.16); border-color: rgba(227,25,55,.45); }
+.zs-item.zs-warn .zs-wert { color: #ff8a97; }
+.zs-label { font-size: .68rem; color: var(--muted); letter-spacing: .07em; text-transform: uppercase; margin-bottom: .2rem; }
+.zs-wert  { font-size: .92rem; font-weight: 600; }
+.zs-hinweis { border-radius: var(--radius-sm); padding: .45rem .75rem; margin-bottom: .5rem; font-size: .85rem; }
+.zs-hinweis-warn { background: rgba(227,25,55,.15); border: 1px solid rgba(227,25,55,.5); color: #ff8a97; }
+.zs-hinweis-info { background: rgba(61,90,153,.2); border: 1px solid rgba(91,127,201,.45); color: #a9bde6; }
+
+/* ── Batterie-Kachel beim Laden ── */
+#ov-akku-karte { position: relative; transition: border-color .4s, box-shadow .4s; }
+#ov-akku-karte.laedt {
+  border-color: rgba(0,200,81,.5);
+  animation: lade-puls 3.2s ease-in-out infinite;
+}
+@keyframes lade-puls {   /* dezent (25.09.2026) */
+  0%, 100% { background: rgba(0,200,81,.05); box-shadow: 0 0 0 0 rgba(0,200,81,0); }
+  50%      { background: rgba(0,200,81,.12); box-shadow: 0 0 12px 0 rgba(0,200,81,.16); }
+}
+#ov-akku-karte.lade-fertig { border-color: rgba(0,200,81,.6); background: rgba(0,200,81,.08); }
+#ov-akku-karte.angesteckt  { border-color: rgba(91,127,201,.6); }
+.lade-badge { display: inline-block; margin-left: .4rem; padding: .05rem .45rem; border-radius: 999px; font-size: .65rem;
+              letter-spacing: .04em; text-transform: none; background: rgba(0,200,81,.18); color: #7df0a8; border: 1px solid rgba(0,200,81,.45); }
+#ov-akku-karte.angesteckt .lade-badge { background: rgba(91,127,201,.18); color: #a9bde6; border-color: rgba(91,127,201,.45); }
+.lade-info { margin-top: .45rem; font-size: .82rem; line-height: 1.45; color: var(--text); }
+.lade-info b { color: #7df0a8; font-size: 1.05rem; }
+/* laufende Streifen im Akkubalken */
+#ov-akku-karte.laedt .battery-fill {
+  background-image: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.45) 50%, rgba(255,255,255,0) 100%);
+  background-size: 60px 100%; background-repeat: repeat-x; animation: lade-strom 1.3s linear infinite;
+}
+@keyframes lade-strom { from { background-position: -60px 0; } to { background-position: 60px 0; } }
+.battery-limit { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: #fff; opacity: .75; border-radius: 1px; }
+.zs-item.zs-laedt { border-left-color: var(--green); animation: lade-puls 3.2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  #ov-akku-karte.laedt, .zs-item.zs-laedt { animation: none; background: rgba(0,200,81,.18); }
+  #ov-akku-karte.laedt .battery-fill { animation: none; }
+}
+/* hidden-Attribut hat Vorrang vor display-Angaben oben */
+.lade-badge[hidden], .lade-info[hidden], .battery-limit[hidden] { display: none !important; }
+
+/* ── Wallbox-Karte ── */
+.card.wb-laedt { border-color: rgba(0,200,81,.5); animation: lade-puls 3.2s ease-in-out infinite; }
+.wb-kopf { display: flex; align-items: center; gap: .5rem; margin-bottom: .8rem; }
+.wb-leistung { display: flex; align-items: baseline; gap: .4rem; flex-wrap: wrap; margin-bottom: .5rem; }
+.wb-kw { font-size: 2.8rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wb-kw.aktiv { color: var(--green); text-shadow: 0 0 10px rgba(0,200,81,.22); }
+.wb-einheit { font-size: 1rem; color: var(--muted); }
+.wb-limit { font-size: .8rem; color: var(--muted); margin-left: .5rem; }
+.wb-balken, .wb-phase-balken { height: 8px; background: rgba(255,255,255,.08); border-radius: 4px; overflow: hidden; }
+.wb-balken { margin-bottom: .7rem; }
+/* Hausanschluss + Lastbegrenzung im Wallbox-Fenster (29.09.2026) */
+.ha-box { margin: .2rem 0 .9rem; padding: .6rem .75rem; border-radius: 10px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); }
+.ha-kopf { display: flex; justify-content: space-between; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .2rem; }
+.ha-status { font-size: .7rem; font-weight: 700; padding: .1rem .5rem; border-radius: 999px; }
+.ha-status.gruen { background: rgba(0,200,81,.18); color: #7df0a8; } .ha-status.gelb { background: rgba(255,179,0,.18); color: #ffd166; }
+.ha-status.rot { background: rgba(227,25,55,.2); color: #ff8fa0; } .ha-status.aus { background: rgba(255,255,255,.08); color: var(--muted); }
+.ha-zeile { display: flex; align-items: baseline; gap: .35rem; flex-wrap: wrap; }
+.ha-kw { font-size: 1.6rem; font-weight: 800; } .ha-kw.gruen { color: #7df0a8; } .ha-kw.gelb { color: #ffd166; } .ha-kw.rot { color: #ff8fa0; }
+.ha-balken { position: relative; height: 8px; background: rgba(255,255,255,.08); border-radius: 4px; margin: .4rem 0 .35rem; }
+.ha-fuell { height: 100%; border-radius: 4px; transition: width .6s ease; } .ha-fuell.gruen { background: var(--green); } .ha-fuell.gelb { background: #ffb300; } .ha-fuell.rot { background: #e31937; }
+.ha-marke { position: absolute; top: -3px; width: 2px; height: 14px; margin-left: -1px; background: #5b7fc9; border-radius: 1px; }
+.ha-marke.teuer { background: #e31937; }
+.ha-gruen { color: #7df0a8; } .ha-gelb { color: #ffd166; } .ha-rot { color: #ff8fa0; }
+.wb-balken > div, .wb-phase-balken > div { height: 100%; background: var(--green); border-radius: 4px; transition: width .6s ease; }
+.wb-balken.aktiv > div, .wb-phase-balken.aktiv > div {
+  background-image: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.45) 50%, rgba(255,255,255,0) 100%);
+  background-size: 60px 100%; background-repeat: repeat-x; animation: lade-strom 1.3s linear infinite;
+}
+.wb-fluss { display: flex; align-items: center; gap: .3rem; margin: .2rem 0 1rem; overflow-x: auto; padding-bottom: .2rem; }
+.wb-knoten { flex: 0 0 auto; text-align: center; background: var(--card2); border: 1px solid rgba(0,200,81,.35); border-radius: var(--radius-sm); padding: .45rem .6rem; min-width: 88px; }
+.wb-knoten-icon { font-size: 1.1rem; }
+.wb-knoten-kw { font-weight: 700; font-variant-numeric: tabular-nums; color: #7df0a8; }
+.wb-knoten-label { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.wb-pfeil { flex: 1 1 24px; min-width: 24px; position: relative; text-align: center; }
+.wb-pfeil span { display: block; height: 2px; background: repeating-linear-gradient(90deg, var(--green) 0 6px, transparent 6px 12px);
+                 background-size: 12px 2px; animation: wb-fliessen .6s linear infinite; }
+@keyframes wb-fliessen { from { background-position: 0 0; } to { background-position: 12px 0; } }
+.wb-verlust { font-size: .75rem; color: var(--muted); margin: -.4rem 0 1rem; }
+.wb-verlust b { color: #ffb35c; }
+.wb-phasen { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; margin-bottom: .8rem; }
+.wb-phase { background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: .55rem .7rem; }
+.wb-phase-a { font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; margin: .1rem 0 .35rem; }
+.wb-phase-a small, .wallbox-item small { font-size: .72rem; font-weight: 400; color: var(--muted); }
+.wb-phase-v { font-size: .75rem; color: var(--muted); margin-top: .35rem; }
+.wb-phase-v span { color: #ffb35c; }
+.wb-kennzahlen { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+.wb-sub { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
+@media (max-width: 600px) { .wb-kennzahlen { grid-template-columns: 1fr; } .wb-phasen { gap: .4rem; } .wb-kw { font-size: 2.2rem; } }
+@media (prefers-reduced-motion: reduce) {
+  .card.wb-laedt, .wb-balken.aktiv > div, .wb-phase-balken.aktiv > div, .wb-pfeil span { animation: none; }
+}
+
+/* Wallbox: Ziel und Restzeit (dezent) */
+.wb-ziel { margin: 0 0 1rem; padding-top: .55rem; border-top: 1px dashed rgba(255,255,255,.07); }
+.wb-ziel-balken { position: relative; height: 4px; background: rgba(255,255,255,.07); border-radius: 2px; margin-bottom: .4rem; }
+.wb-ziel-balken .ist { height: 100%; background: rgba(0,200,81,.55); border-radius: 2px; transition: width .6s ease; }
+.wb-ziel-balken .ziel { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: rgba(255,255,255,.8); border-radius: 1px; }
+.wb-ziel-text { font-size: .8rem; color: var(--muted); }
+.wb-ziel-text b { color: var(--text); font-weight: 600; }
+.lade-info b.lade-um { font-size: inherit; }
+
+/* ── Pendeln ── */
+.pd-werte .stat-value { font-size: 1.6rem; }
+.pd-punkt { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: .4rem; vertical-align: middle; }
+#pendel-inhalt[hidden], #pendel-leer[hidden] { display: none !important; }
+
+/* ── Auffälligkeiten ── */
+.af-item { display: flex; flex-direction: column; gap: .15rem; border-radius: var(--radius-sm); padding: .5rem .75rem; margin-bottom: .5rem; font-size: .85rem; }
+.af-item b { font-weight: 600; }
+.af-item span { color: var(--text); opacity: .85; line-height: 1.4; }
+.af-item.af-warn { background: rgba(227,25,55,.13); border: 1px solid rgba(227,25,55,.45); }
+.af-item.af-warn b { color: #ff8a97; }
+.af-item.af-info { background: rgba(61,90,153,.18); border: 1px solid rgba(91,127,201,.45); }
+.af-item.af-info b { color: #a9bde6; }
+.af-alles-ok { background: rgba(0,200,81,.10); border: 1px solid rgba(0,200,81,.3); color: #7df0a8; border-radius: var(--radius-sm); padding: .5rem .75rem; font-size: .88rem; margin-bottom: .5rem; }
+.af-geprueft { font-size: .72rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; }
+.af-chip { border: 1px solid var(--border); border-radius: 999px; padding: .05rem .5rem; }
+.af-chip.af-ok { border-color: rgba(0,200,81,.35); color: #8fdcac; }
+.af-chip.af-auffaellig, .af-chip.af-warn { border-color: rgba(227,25,55,.5); color: #ff8a97; }
+.af-chip.af-hinweis { border-color: rgba(255,136,0,.55); color: #ffb35c; }
+.af-chip.af-info { border-color: rgba(91,127,201,.5); color: #a9bde6; }
+.af-chip.af-keine_daten { opacity: .7; }
+.af-chip small { font-size: .65rem; }
+
+/* ── Zeitleiste ── */
+.zl-wrap { padding: .2rem 0 .1rem; }
+.zl-balken { position: relative; height: 30px; background: rgba(255,255,255,.04); border-radius: 6px; overflow: hidden; cursor: crosshair; }
+.zl-seg { position: absolute; top: 0; bottom: 0; transition: filter .15s; }
+.zl-seg:hover, .zl-seg.aktiv { filter: brightness(1.35); box-shadow: inset 0 0 0 2px rgba(255,255,255,.7); z-index: 2; }
+.zl-fahren, .zl-punkt.zl-fahren   { background: #a66cff; }   /* violett */
+.zl-laden, .zl-punkt.zl-laden     { background: #00c851; }
+.zl-wach, .zl-punkt.zl-wach       { background: #ffb300; }
+.zl-schlaeft, .zl-punkt.zl-schlaeft { background: #2f63c9; }   /* blau (Wunsch 26.09.2026) */
+.zl-offline, .zl-punkt.zl-offline { background: repeating-linear-gradient(45deg, #444 0 4px, #333 4px 8px); }
+.zl-unbekannt, .zl-punkt.zl-unbekannt { background: transparent; }
+.zl-seg.zl-fahren, .zl-seg.zl-laden { min-width: 3px; }
+.zl-achse { position: relative; height: 1.3rem; font-size: .68rem; color: var(--muted); }
+.zl-achse span { position: absolute; top: .25rem; transform: translateX(-50%); white-space: nowrap; }
+.zl-achse span::before { content: ''; position: absolute; left: 50%; top: -.35rem; height: .25rem; border-left: 1px solid var(--border); }
+.zl-achse .zl-jetzt { transform: translateX(-100%); color: var(--text); }
+.zl-achse .zl-jetzt::before { left: 100%; }
+.zl-info { font-size: .8rem; color: var(--muted); min-height: 1.3rem; margin: .3rem 0 .4rem; }
+.zl-info b { color: var(--text); }
+.zl-legende { display: flex; flex-wrap: wrap; gap: .4rem 1rem; font-size: .78rem; color: var(--muted); }
+.zl-legende b { color: var(--text); font-weight: 600; margin-left: .2rem; }
+.zl-punkt { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: .35rem; vertical-align: -1px; }
+.zl-punkt.zl-unbekannt { border: 1px dashed var(--muted); }
+
+.af-item.af-hinweis { background: rgba(255,136,0,.12); border: 1px solid rgba(255,136,0,.45); }
+.af-item.af-hinweis b { color: #ffb35c; }
+
+/* ── Karte: Fahrten ── */
+.karte-leiste { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-bottom: .7rem; }
+.karte-auswahl { flex: 1 1 260px; max-width: 460px; background: var(--card2); color: var(--text); border: 1px solid var(--border);
+                 border-radius: var(--radius-sm); padding: .45rem .6rem; font: inherit; font-size: .85rem; }
+.karte-legende { display: flex; flex-wrap: wrap; gap: .3rem .8rem; align-items: center; font-size: .75rem; color: var(--muted); margin-bottom: .6rem; }
+.karte-legende span { display: inline-flex; align-items: center; gap: .3rem; }
+.karte-legende i { display: inline-block; width: 18px; height: 5px; border-radius: 3px; }
+.leaflet-popup-content { font-size: .82rem; line-height: 1.45; }
+.leaflet-popup-content a { color: var(--accent); font-weight: 600; }
+@media (max-width: 600px) { .karte-auswahl { max-width: none; } }
+
+/* ── Status-Kachel in Zeitleisten-Farben (dezent) ── */
+.status-karte { border-left: 4px solid var(--border); transition: background .4s, border-color .4s; }
+.status-karte.st-schlaeft { background: rgba(47,99,201,.20);  border-color: rgba(47,99,201,.55);  border-left-color: #2f63c9; }
+.status-karte.st-wach     { background: rgba(255,179,0,.14);  border-color: rgba(255,179,0,.45);  border-left-color: #ffb300; }
+.status-karte.st-fahren   { background: rgba(166,108,255,.18); border-color: rgba(166,108,255,.55); border-left-color: #a66cff; }
+.status-karte.st-laden    { background: rgba(0,200,81,.16);   border-color: rgba(0,200,81,.5);    border-left-color: #00c851; }
+.status-karte.st-offline  { background: rgba(120,120,120,.10); border-color: rgba(120,120,120,.4); border-left-color: #777; }
+
+/* ── Kärtchen, deren Wert nicht passt (orange = Hinweis, rot = Warnung) ── */
+.card.karte-hinweis, .stat-card.karte-hinweis { background: rgba(255,136,0,.17); border-color: rgba(255,136,0,.65); }
+.card.karte-warn, .stat-card.karte-warn       { background: rgba(227,25,55,.18); border-color: rgba(227,25,55,.7); }
+.stat-card.karte-hinweis #ov-soc { color: var(--warn); }
+.stat-card.karte-warn #ov-soc { color: var(--accent); }
+.stat-card.karte-hinweis .battery-fill { background: var(--warn); }
+.stat-card.karte-warn .battery-fill { background: var(--accent); }
+/* Laden bei niedrigem Akku: pulsierend in der Warnfarbe statt grün */
+@keyframes lade-puls-orange {
+  0%, 100% { background: rgba(255,136,0,.07); box-shadow: 0 0 0 0 rgba(255,136,0,0); }
+  50%      { background: rgba(255,136,0,.20); box-shadow: 0 0 12px 0 rgba(255,136,0,.22); }
+}
+@keyframes lade-puls-rot {
+  0%, 100% { background: rgba(227,25,55,.08); box-shadow: 0 0 0 0 rgba(227,25,55,0); }
+  50%      { background: rgba(227,25,55,.22); box-shadow: 0 0 12px 0 rgba(227,25,55,.24); }
+}
+#ov-akku-karte.laedt.karte-hinweis { animation: lade-puls-orange 3.2s ease-in-out infinite; border-color: rgba(255,136,0,.65); }
+#ov-akku-karte.laedt.karte-warn    { animation: lade-puls-rot 3.2s ease-in-out infinite;    border-color: rgba(227,25,55,.7); }
+@media (prefers-reduced-motion: reduce) {
+  #ov-akku-karte.laedt.karte-hinweis, #ov-akku-karte.laedt.karte-warn { animation: none; }
+}
+.tpms-temp { text-align: center; font-size: .75rem; color: var(--muted); margin-top: .4rem; }
+.tpms-temp b { color: var(--text); font-weight: 600; }
+.karte-schalter { display: inline-flex; align-items: center; gap: .35rem; font-size: .8rem; color: var(--muted); cursor: pointer; user-select: none; }
+.karte-schalter input { accent-color: var(--accent); }
+.karte-legende[hidden] { display: none !important; }
+#anmeldung-hinweis { position: sticky; top: 0; z-index: 3000; background: #7a1020; color: #fff; text-align: center; padding: .6rem 1rem; font-size: .9rem; }
+#anmeldung-hinweis a { color: #fff; font-weight: 700; }
+
+/* Verlustbilanz-Fenster (Wallbox) */
+.hat-verlust { cursor: help; }
+td.hat-verlust { text-decoration: underline dotted; text-underline-offset: 3px; }
+.vf-i { text-transform: none; letter-spacing: 0; color: #7fa8ff; }
+#verlust-fenster { position: absolute; z-index: 4000; width: min(380px, calc(100vw - 16px)); background: var(--card, #1a1f2b); border: 1px solid var(--border); border-radius: 10px; padding: .8rem .9rem; box-shadow: 0 10px 30px rgba(0,0,0,.45); font-size: .8rem; color: var(--text); pointer-events: none; }
+#verlust-fenster[hidden] { display: none !important; }
+.vf-titel { font-weight: 700; margin-bottom: .5rem; }
+.vf-balken { display: flex; height: 14px; border-radius: 7px; overflow: hidden; margin-bottom: .6rem; background: var(--border); }
+.vf-akku { background: #00c851; } .vf-auto { background: #ff8800; } .vf-leitung { background: #e31937; }
+.vf-tabelle { width: 100%; border-collapse: collapse; }
+.vf-tabelle td { padding: .18rem 0; font-variant-numeric: tabular-nums; }
+.vf-tabelle td:nth-child(2), .vf-tabelle td:nth-child(3) { text-align: right; padding-left: .6rem; white-space: nowrap; }
+.vf-tabelle td i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: .35rem; }
+.vf-tabelle small, .vf-unter small { color: var(--muted); }
+.vf-minus td { color: var(--muted); }
+.vf-summe td { border-top: 1px solid var(--border); padding-top: .35rem; font-weight: 700; color: #ff8800; }
+.vf-unter { margin: .7rem 0 .3rem; font-weight: 600; }
+.vf-strom-zeile { display: grid; grid-template-columns: 2.6rem 1fr 7.5rem; gap: .5rem; align-items: center; color: var(--muted); font-variant-numeric: tabular-nums; }
+.vf-strom-zeile span:last-child { text-align: right; }
+.vf-strom-zeile.aktiv { color: var(--text); font-weight: 600; }
+.vf-strom-balken { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.vf-strom-balken div { height: 100%; background: #e31937; opacity: .55; }
+.vf-strom-zeile.aktiv .vf-strom-balken div { opacity: 1; }
+.vf-hinweis { margin-top: .6rem; color: var(--muted); font-size: .72rem; line-height: 1.35; }
+
+/* Akku-Gesundheit (Tab Batterie) */
+.kap-kacheln { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; margin-bottom: .8rem; }
+.kap-wert { font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.kap-balken { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-bottom: .9rem; }
+.kap-balken div { height: 100%; width: 0; background: linear-gradient(90deg, #00c851, #6fdc8c); border-radius: 4px; transition: width .6s; }
+.kap-hinweis { margin-top: .6rem; font-size: .75rem; line-height: 1.5; color: var(--muted); }
+.kap-hinweis b { color: var(--text); font-weight: 600; }
+
+/* Hintergrundkarte (wie DaheimLader): hinter allem (z-index -1 liegt über dem Seitenhintergrund, unter dem Inhalt) */
+#map-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; filter: grayscale(1) brightness(.22) contrast(1.1); }
+#map-bg .leaflet-control-attribution { pointer-events: auto; background: rgba(0,0,0,.4); color: #999; font-size: 10px; }
+#map-bg .leaflet-control-attribution a { color: #bbb; }
+.card, .stat-card { background: rgba(26,26,46,.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.bg-auto { width: 14px; height: 14px; border-radius: 50%; background: #e31937; border: 2px solid #fff; animation: bg-auto-puls 2s infinite; }
+@keyframes bg-auto-puls { 0% { box-shadow: 0 0 0 0 rgba(227,25,55,.6); } 70% { box-shadow: 0 0 0 10px rgba(227,25,55,0); } 100% { box-shadow: 0 0 0 0 rgba(227,25,55,0); } }
+.vf-tabelle td.vf-eur { color: var(--muted); padding-left: .6rem; text-align: right; white-space: nowrap; }
+.vf-summe td.vf-eur { color: #ff8800; }
+#verlust-fenster { width: min(430px, calc(100vw - 16px)); }
+.karte-kosten { margin-top: .35rem; font-size: .9rem; color: var(--text); }
+.karte-kosten b { color: #ffb300; font-size: 1.05rem; }
+.karte-kosten span { color: var(--muted); font-size: .72rem; }
+.leaflet-popup-content .karte-kosten { margin: .3rem 0; color: #222; }
+.leaflet-popup-content .karte-kosten b { color: #b36b00; }
+.leaflet-popup-content .karte-kosten span { color: #666; }
+
+/* Tabellen nach Monat (Laden, Fahrten) */
+.monats-tabelle tr.monat-kopf td { background: rgba(61,90,153,.18); border-top: 1px solid var(--border); cursor: pointer; font-variant-numeric: tabular-nums; vertical-align: top; }
+.monats-tabelle tr.monat-kopf:hover td { background: rgba(61,90,153,.28); }
+.monats-tabelle tr.monat-kopf:focus-visible td { outline: 2px solid #7fa8ff; outline-offset: -2px; }
+.monats-tabelle .monat-pfeil { display: inline-block; transition: transform .2s; color: var(--muted); }
+.monats-tabelle tr.monat-kopf.offen .monat-pfeil { transform: rotate(90deg); }
+.monats-tabelle tr.monat-zeile[hidden] { display: none; }
+.monats-tabelle tr.monat-zeile td:first-child { padding-left: 1.6rem; }
+.monats-tabelle .monat-teil { display: block; font-size: .72rem; color: var(--muted); font-weight: 400; }
+.chart-titel { font-size: .75rem; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; margin-bottom: .3rem; }
+.chart-titel .stat-hint { text-transform: none; letter-spacing: 0; }
