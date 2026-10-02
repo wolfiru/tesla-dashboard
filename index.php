@@ -1947,13 +1947,16 @@ function loadStatistik(still) {
       data: {
         labels: mListe.map(mText),
         datasets: [
-          {type: 'bar',  label: 'km', data: mListe.map(k => mWert(k, 'km')), backgroundColor: 'rgba(61,90,153,.7)', yAxisID: 'y', borderRadius: 4},
+          {type: 'bar',  label: 'km', data: mListe.map(k => mWert(k, 'km')), backgroundColor: 'rgba(61,90,153,.7)', yAxisID: 'y', stack: 'km', borderRadius: 4},
           // Wh/km-Achse ab 0: sonst zoomt sie auf wenige Wh/km und kleine Unterschiede wirken riesig
-          {type: 'line', label: 'Wh/km', data: mListe.map(k => mWert(k, 'wh_km')), borderColor: '#e31937', backgroundColor: '#e31937', yAxisID: 'y1', tension: 0, pointRadius: 4, spanGaps: false},
-          {type: 'line', label: 'geladen kWh', data: mListe.map(k => mWert(k, 'geladen_kwh')), borderColor: '#00c851', borderDash: [4,4], yAxisID: 'y', tension: 0, spanGaps: false},
+          {type: 'line', label: 'Wh/km', data: mListe.map(k => mWert(k, 'wh_km')), borderColor: '#ffb300', backgroundColor: '#ffb300', yAxisID: 'y1', tension: 0, pointRadius: 4, spanGaps: false},
+          // Geladen als gestapelter Balken neben den km: daheim grün, anderswo (Ladesäule, Supercharger) rot
+          {type: 'bar', label: 'geladen daheim kWh', data: mListe.map(k => mWert(k, 'daheim_kwh') ?? mWert(k, 'geladen_kwh')), backgroundColor: 'rgba(0,200,81,.7)', yAxisID: 'y', stack: 'laden', borderRadius: 4},
+          {type: 'bar', label: 'geladen anderswo kWh', data: mListe.map(k => mWert(k, 'anderswo_kwh')), backgroundColor: 'rgba(227,25,55,.75)', yAxisID: 'y', stack: 'laden', borderRadius: 4},
         ]
       },
-      options: {maintainAspectRatio: false, scales: {y: {beginAtZero: true, title: {display: true, text: 'km / kWh'}},
+      options: {maintainAspectRatio: false, plugins: {tooltip: {mode: 'index', intersect: false}},
+                scales: {x: {stacked: true}, y: {stacked: true, beginAtZero: true, title: {display: true, text: 'km / kWh'}},
                 y1: {position: 'right', beginAtZero: true, suggestedMax: 300, grid: {drawOnChartArea: false}, title: {display: true, text: 'Wh/km'}}}}
     });
 

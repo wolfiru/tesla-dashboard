@@ -132,6 +132,21 @@ $monate = fetchAll($db, "
     WHERE monat >= date_trunc('month', now() - \$1::interval)
     ORDER BY monat", [$interval]);
 
+// Geladen je Monat, daheim (Adresse im Umkreis der Wallbox) und anderswo getrennt
+$daheimMonat = sprintf("(SELECT sqrt(power((ad.latitude - %F) * 111320, 2) + power((ad.longitude - %F) * 111320 * cos(radians(%F)), 2)) < %d
+                         FROM addresses ad WHERE ad.id = cp.address_id)", HEIM_LAT, HEIM_LON, HEIM_LAT, HEIM_RADIUS_M);
+$ladenMonat = fetchAll($db, "
+    SELECT to_char(date_trunc('month', cp.start_date AT TIME ZONE 'UTC' AT TIME ZONE '" . TIMEZONE . "'), 'YYYY-MM') AS monat,
+           round(coalesce(sum(cp.charge_energy_added) FILTER (WHERE coalesce($daheimMonat, false)), 0), 1)     AS daheim_kwh,
+           round(coalesce(sum(cp.charge_energy_added) FILTER (WHERE NOT coalesce($daheimMonat, false)), 0), 1) AS anderswo_kwh
+    FROM charging_processes cp
+    WHERE cp.end_date IS NOT NULL AND cp.start_date >= date_trunc('month', now() - \$1::interval)
+    GROUP BY 1 ORDER BY 1", [$interval]);
+foreach ($monate as &$m) {
+    foreach ($ladenMonat as $l) if ($l['monat'] === $m['monat']) { $m['daheim_kwh'] = (float)$l['daheim_kwh']; $m['anderswo_kwh'] = (float)$l['anderswo_kwh']; }
+}
+unset($m);
+
 // Ladevorgänge: Verluste, Kapazität, Reichweite bei 100 %
 $ladungen = fetchAll($db, "
     SELECT id, start_date AT TIME ZONE 'UTC' AS start_date, dc::int AS dc, round(p_avg, 1) AS p_avg, phasen, ampere,
